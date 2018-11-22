@@ -7,6 +7,15 @@ Shift up non missing values read backwards dow.
        3  Interpolating values in a timeseries when some first,last and middle values are missing
           see https://goo.gl/iQn3nU
           https://communities.sas.com/t5/SAS-Procedures/shifts-up-not-missing-variables/m-p/515208
+          
+    Recent solutions on end by
+
+    Bartosz Jablonski
+    yabwon@gmail.com
+
+     4. HASH soultion
+     5. Array Solution
+
 
     github
     https://tinyurl.com/ycwdt2kf
@@ -166,5 +175,86 @@ Shift up non missing values read backwards dow.
     6 5
     ;;;;
     run;quit;
+    
+        *____             _
+    | __ )  __ _ _ __| |_
+    |  _ \ / _` | '__| __|
+    | |_) | (_| | |  | |_
+    |____/ \__,_|_|   \__|
+
+    ;
+
+    Recent solutions on end by
+
+    Bartosz Jablonski
+    yabwon@gmail.com
+
+     4. HASH soultion
+     5. Array Solution
+
+
+    4. HASH soultion
+    ----------------
+
+    data _null_;
+      declare hash H(ordered:"a");
+      H.defineKey("curobs");
+      H.defineData("curobs");
+      H.defineData("var1");
+      H.defineData("var2");
+      H.defineDone();
+      declare hiter I("H");
+
+      do until(EOF);
+       set have end=EOF curobs=curobs;
+       H.add();
+      end;
+
+      do while(I.prev()=0);
+        if var2 ne . then _t2 = var2;
+                     else var2 = _t2;
+        H.replace();
+      end;
+
+      H.output(dataset:"want(drop=curobs)");
+      stop;
+    run;
+
+
+    5. Array Solution
+    -----------------
+
+    data _null_;
+      set have nobs=nobs;
+      call symputX("nobs", nobs, "G");
+      stop;
+    run;
+
+    data want2;
+      array arr1_[&nobs.] _temporary_;
+      array arr2_[&nobs.] _temporary_;
+
+      do until(EOF);
+       set have end=EOF curobs=curobs;
+       arr1_[curobs] = var1;
+       arr2_[curobs] = var2;
+      end;
+
+      do _N_ = dim(arr1_) to 1 by -1; drop _t2;
+        if arr2_[_N_] ne . then _t2 = arr2_[_N_];
+                           else arr2_[_N_] = _t2;
+      end;
+
+      do _N_ = 1 to dim(arr1_) by 1;
+        var1 = arr1_[_N_];
+        var2 = arr2_[_N_];
+        output;
+      end;
+
+      stop;
+    run;
+
+
+
 
 
