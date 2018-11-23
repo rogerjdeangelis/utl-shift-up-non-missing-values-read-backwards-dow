@@ -6,16 +6,18 @@ Shift up non missing values read backwards dow.
        2. read backward then carry forward and fip again
        3  Interpolating values in a timeseries when some first,last and middle values are missing
           see https://goo.gl/iQn3nU
-          https://communities.sas.com/t5/SAS-Procedures/shifts-up-not-missing-variables/m-p/515208
+          https://communities.sas.com/t5/SAS-Procedures/shifts-up-not-missing-variables/m-p/515208          
+       4. HASH soultion
+       5. Array Solution
+       6. Paul Dorfmans simple elegant dow solution (on end)
           
-    Recent solutions on end by
+     Recent solutions on end by
 
-    Bartosz Jablonski
-    yabwon@gmail.com
-
-     4. HASH soultion
-     5. Array Solution
-     6. Paul Dorfmans simple elegant dow solution (on end)
+     Bartosz Jablonski
+     yabwon@gmail.com
+    
+     Paul Dorfman
+     sashole@bellsouth.net
 
      Thanks to the Op, Paul,  Bartosz and the op for a interesting question
      and innovative answers.
