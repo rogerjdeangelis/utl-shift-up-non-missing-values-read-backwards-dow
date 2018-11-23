@@ -9,7 +9,7 @@ Shift up non missing values read backwards dow.
           https://communities.sas.com/t5/SAS-Procedures/shifts-up-not-missing-variables/m-p/515208          
        4. HASH soultion
        5. Array Solution
-       6. Paul Dorfmans simple elegant dow solution (on end)
+       6. Paul Dorfmans simple elegant dow solution (on end - final with enhancement)
           
      Recent solutions on end by
 
@@ -332,6 +332,40 @@ Shift up non missing values read backwards dow.
         output ;
       end ;
     run ;
+
+    * enhanced;
+    
+        Thanks! and I agree with your amendment.
+    Perhaps for generality, NOT MISSING() would be even better,
+    since it makes the code independent of the var2 data type.
+    Nitpicking further, it's possible to both make the step a
+    bit more efficient and still terser, plus retain the
+    (var1, var2) original PDV order:
+
+    data have ;
+     input var1 var2 ;
+    cards ;
+    1 .
+    2 .
+    4 .
+    5 4
+    3 9
+    3 .
+    3 .
+    6 5
+    run ;
+
+    data want (drop = _:) ;
+      do _n_ = 1 by 1 until (not missing (_fill)) ;
+        set have (rename=(var2=_fill)) ;
+      end ;
+      do _n_ = 1 to _n_ ;
+        set have (drop=var2) ;
+        var2 = _fill ;
+        output ;
+      end ;
+    run ;
+
 
 
 
