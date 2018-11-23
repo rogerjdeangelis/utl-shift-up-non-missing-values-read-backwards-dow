@@ -277,65 +277,61 @@ Shift up non missing values read backwards dow.
     run;
 
 
+    *____             _
+    |  _ \ __ _ _   _| |
+    | |_) / _` | | | | |
+    |  __/ (_| | |_| | |
+    |_|   \__,_|\__,_|_|
 
-*____             _
-|  _ \ __ _ _   _| |
-| |_) / _` | | | | |
-|  __/ (_| | |_| | |
-|_|   \__,_|\__,_|_|
+    ;
 
-;
+        5. Paul Dorfmans simple elegant dow solution
 
-    5. Paul Dorfmans simple elegant dow solution
+     Thanks to the Op, Paul,  Bartosz and the op for a interesting question
+    and innovative answers.
 
- Thanks to the Op, Paul,  Bartosz and the op for a interesting question
-and innovative answers.
+    See Paul Dorfman's 'best?' solution on end
 
-See Paul Dorfman's 'best?' solution on end
+    Paul Dorfman
+    sashole@bellsouth.net
 
-Paul Dorfman
-sashole@bellsouth.net
+    Nice Paul
 
-Nice Paul
+    The simplest and elegant solution is odten the best.
 
-The simplest and elegant solution is odten the best.
+    I made a slight change to Pauls solution to cover the 0 case(var2 ne .).
+    Note 'do while' does not work, until gets the 'next' value
+    but does not go back and increment _n_ even though it has the
+    next var2.
 
-I made a slight change to Pauls solution to cover the 0 case(var2 ne .).
-Note 'do while' does not work, until gets the 'next' value
-but does not go back and increment _n_ even though it has the
-next var2.
-
-This is a nice example of tje difference between
-'do until' and 'do while.
-
-
-data have ;
- input var1 var2 ;
-cards ;
-1 .
-2 .
-4 .
-5 4
-3 9
-3 .
-3 .
-6 0
-run ;
-
-data want (drop = _:) ;
-  do _n_ = 1 by 1 until (var2 ne .) ;
-    set have ;
-  end ;
-  _fill = var2 ;
-  do _n_ = 1 to _n_ ;
-    set have ;
-    var2 = _fill ;
-    output ;
-  end ;
-run ;
+    This is a nice example of tje difference between
+    'do until' and 'do while.
 
 
+    data have ;
+     input var1 var2 ;
+    cards ;
+    1 .
+    2 .
+    4 .
+    5 4
+    3 9
+    3 .
+    3 .
+    6 0
+    run ;
 
+    data want (drop = _:) ;
+      do _n_ = 1 by 1 until (var2 ne .) ;
+        set have ;
+      end ;
+      _fill = var2 ;
+      do _n_ = 1 to _n_ ;
+        set have ;
+        var2 = _fill ;
+        output ;
+      end ;
+    run ;
 
 
 
