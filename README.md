@@ -1,7 +1,25 @@
 # utl-shift-up-non-missing-values-read-backwards-dow
 Shift up non missing values read backwards dow.
     Shift up non missing values read backwards dow
+    
+      A grand tour of the interaction of mutiple set statements, HASH, array, do until/while ,                                                 set point and read backwards.       
 
+       WOW see #7 for Mark Keintz five statement solution below
+       
+       SYNOPSIS
+       set have (keep=var2) end=end_of_have;                                                             
+       if var2^=. or end_of_have then                                                                    
+         do _i=1 to coalesce(dif(_n_),_n_);                                                              
+            set have ;                                                                        
+         output;                                                                                         
+       end; 
+       
+       The dif function calculates the number of '.'s .                                                  
+       Dropping var2 retains the non-missing.                                                            
+       Very minor nickpick. I think you can remove the 'drop=var2?
+       
+       All Solutions
+       
        1. DOW datastep - read ahead
        2. read backward then carry forward and fip again
        3  Interpolating values in a timeseries when some first,last and middle values are missing
@@ -10,7 +28,27 @@ Shift up non missing values read backwards dow.
        4. HASH soultion
        5. Array Solution
        6. Paul Dorfmans simple elegant dow solution (on end - final with enhancement)
-          
+       
+       7. Five statement solution Dif function and interaction of set statements (brilliant) by            
+          Keintz, Mark                                                                                     
+          mkeintz@wharton.upenn.edu   
+       
+    Who knew it could could be done in 5 lines of code(#7)                                              
+                                                                                                        
+      Keintz, Mark                                                                                      
+      mkeintz@wharton.upenn.edu                                                                         
+                                                                                                        
+      set have (keep=var2) end=end_of_have;                                                             
+      if var2^=. or end_of_have then                                                                    
+        do _i=1 to coalesce(dif(_n_),_n_);                                                              
+           set have (drop=var2);                                                                        
+        output;                                                                                         
+      end;                                                                                              
+                                                                                                        
+      The dif function calculates the number of '.'s .                                                  
+      Dropping var2 retains the non-missing.                                                            
+      Very minor nickpick. I think you can remove the 'drop=var2?                                                           
+                               
      Recent solutions on end by
 
      Bartosz Jablonski
@@ -366,6 +404,85 @@ Shift up non missing values read backwards dow.
       end ;
     run ;
 
+
+    *__  __            _                                                                                
+    |  \/  | __ _ _ __| | __                                                                            
+    | |\/| |/ _` | '__| |/ /                                                                            
+    | |  | | (_| | |  |   <                                                                             
+    |_|  |_|\__,_|_|  |_|\_\                                                                            
+                                                                                                        
+    ;                                                                                                   
+                                                                                                        
+                                                                                                        
+    A grand tour of the interaction of mutiple set statements, HASH, array, do until/while ,            
+    set point and read backwards.                                                                     
+                                                                                                        
+    github                                                                                              
+                                                                                                    
+    WOW Mark                                                                                            
+                                                                                                        
+    7. Five statement solution Dif function and interaction of set statements (brilliant) by            
+       Keintz, Mark                                                                                     
+       mkeintz@wharton.upenn.edu   
+       
+      Who knew it could could be done in 5 lines of code(#7)                                              
+                                                                                                        
+      Keintz, Mark                                                                                      
+      mkeintz@wharton.upenn.edu                                                                         
+                                                                                                        
+      set have (keep=var2) end=end_of_have;                                                             
+      if var2^=. or end_of_have then                                                                    
+        do _i=1 to coalesce(dif(_n_),_n_);                                                              
+           set have (drop=var2);                                                                        
+        output;                                                                                         
+      end;                                                                                              
+                                                                                                        
+      The dif function calculates the number of '.'s .                                                  
+      Dropping var2 retains the non-missing.                                                            
+      Very minor nickpick. I think you can remove the 'drop=var2?                                                           
+                                                                                                        
+                                                                                                        
+      So is the DIF function, even when evaluated only                                                  
+      when an if condition is satisfied.                                                                
+                                                                                                        
+    data have;                                                                                          
+     input var1 var2;                                                                                   
+    cards4;                                                                                             
+     1 .                                                                                                
+     2 .                                                                                                
+     4 .                                                                                                
+     5 4                                                                                                
+     3 9                                                                                                
+     3 .                                                                                                
+     3 .                                                                                                
+     6 .                                                                                                
+     7 0                                                                                                
+    ;;;;                                                                                                
+    run;                                                                                                
+                                                                                                        
+    data want (drop=_i);                                                                                
+      if 0 then set have;             /*Just to preserve variable order */                              
+      set have (keep=var2) end=end_of_have;                                                             
+      if var2^=. or end_of_have then do _i=1 to coalesce(dif(_n_),_n_);                                 
+        set have (drop=var2);                                                                           
+            output;                                                                                     
+      end;                                                                                              
+    run;                                                                                                
+                                                                                                        
+    data want (drop=_i);                                                                                
+      if 0 then set have;             /*Just to preserve variable order */                              
+      set have  end=end_of_have;                                                                        
+      if var2^=. or end_of_have then do _i=1 to coalesce(dif(_n_),_n_);                                 
+        set have (drop=var2);                                                                           
+            output;                                                                                     
+      end;                                                                                              
+    run;                                                                                                
+                                                                                                        
+    The "or end_of_have" condition is to accommodate missing values at the end of have.                 
+                                                                                                        
+                                                                                                        
+                                                                                                        
+                                                                                                        
 
 
 
