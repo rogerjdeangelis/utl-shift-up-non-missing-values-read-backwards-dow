@@ -1,5 +1,8 @@
 Shift up non missing values read backwards dow
 
+  A grand tour of the interaction of mutiple set statements, HASH, array, do until/while , set point and
+  read backwards.
+
    1. DOW datastep - read ahead
    2. read backward then carry forward and fip again
    3  Interpolating values in a timeseries when some first,last and middle values are missing
